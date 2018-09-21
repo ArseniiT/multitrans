@@ -31,19 +31,16 @@ export default {
   },
   methods: {
     formSubmit (e) {
-      this.$emit('formSubmit', this.textForTranslate, this.langHome);
+      this.$emit('formSubmit', this.textForTranslate, this.langHome, this.langs);
       e.preventDefault();
     },
     choosedLang (e) {
       this.langHome = e;
-      this.langs = ['en', 'fr', 'de']
+      this.langs = ['ru', 'en', 'fr', 'de']
       let index = this.langs.indexOf(e);
-      console.log(index + ' ' + e)
       if (index > -1) {
-        //this.langs.splice(index, 1);
-        this.langs.push(e)
+        this.langs.splice(index, 1);
       }
-      console.log(this.langs)
       this.$emit('langsSubmit', this.langs);
     }
   }

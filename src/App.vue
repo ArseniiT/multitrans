@@ -9,13 +9,8 @@
           <h1>Multi translator</h1>
           <TranslateForm
             v-on:formSubmit="translateText"
-            v-on:choosedLang="changeLangs"
+            v-on:langsSubmit="changeLangs"
           ></TranslateForm>
-          <!-- <ul id="example-1">
-            <li v-for="word in words">
-              {{ word }}
-            </li>
-          </ul> -->
         </div>
         <div class="col-sm"></div>
       </div>
@@ -27,53 +22,54 @@
             <p class="card-text text-success"><h2>{{ word.text }}</h2></p>
           </div>
         </div>
-
       </div>
 
     </div>
+
+    <Footer></Footer>
 
   </div>
 </template>
 
 <script>
 import TranslateForm from './components/TranslateForm'
+import Footer from './components/Footer'
+
 import axios from 'axios'
 let url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20180918T035733Z.0403f2aa10334fc4.421d7c2af7681f545dea5c8f42b061d8dbf609f5';
 export default {
   name: 'App',
   data() {
     return {
-      words: [],
+      words: [{lang: 'en', text: ''}, {lang: 'fr', text: ''}, {lang: 'de', text: ''}],
       langs: []
     };
   },
   components: {
-    TranslateForm
+    TranslateForm,
+    Footer
   },
   methods: {
-    translateText: function (text, langHome) {
+    translateText: function (text, langHome, langs) {
       if(text) {
-
-          axios.all([
-
-            axios.get(url + '&lang=' + langHome + '-en&text=' + text),
-            axios.get(url + '&lang=' + langHome + '-fr&text=' + text),
-            axios.get(url + '&lang=' + langHome + '-de&text=' + text),
-            axios.get(url + '&lang=' + langHome + '-ru&text=' + text)
-          ])
-          .then(axios.spread((lng1, lng2, lng3) => {
-            this.words = []
-            this.words.push( {lang: lng1.data.lang.substring(3, 5), text: lng1.data.text[0]})
-            this.words.push( {lang: lng2.data.lang.substring(3, 5), text: lng2.data.text[0]})
-            this.words.push( {lang: lng3.data.lang.substring(3, 5), text: lng3.data.text[0]})
-          }))
+        let promises = [];
+        langs.forEach(e => {
+          promises.push( axios.get(url + '&lang=' + langHome + '-' + e + '&text=' + text))
+        })
+        axios.all(promises)
+        .then(axios.spread((...args) => {
+          this.words = []
+          for (let i = 0; i < args.length; i++) {
+            this.words.push( {lang: args[i].data.lang.substring(3, 5), text: args[i].data.text[0]})
+          }
+        }))
       }
     },
     changeLangs: function (langs) {
       if(langs) {
-        langs.forEach(element => {
-          this.langs.push( element )
-          console.log(element)
+        this.words =[]
+        langs.forEach(e => {
+          this.words.push( {lang: e, text: ''})
         });
       }
     }
