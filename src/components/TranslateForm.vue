@@ -2,10 +2,10 @@
   <div id="translateForm">
 
           <div class="custom-block">
-            <button v-on:click="langHome = 'ru'" class="btn btn-light custom">RU</button>
-            <button v-on:click="langHome = 'en'" class="btn btn-light custom">ENG</button>
-            <button v-on:click="langHome = 'fr'" class="btn btn-light custom">FR</button>
-            <button v-on:click="langHome = 'de'" class="btn btn-light custom">DEUTSCH</button>
+            <button v-on:click="choosedLang('ru')" class="btn btn-light custom">RU</button>
+            <button v-on:click="choosedLang('en')" class="btn btn-light custom">ENG</button>
+            <button v-on:click="choosedLang('fr')" class="btn btn-light custom">FR</button>
+            <button v-on:click="choosedLang('de')" class="btn btn-light custom">DEUTSCH</button>
           </div>
 
           <form v-on:submit="formSubmit">
@@ -25,13 +25,26 @@ export default {
   data() {
     return{
       textForTranslate: '',
-      langHome: 'ru'
+      langHome: 'ru',
+      langs: ['en', 'fr', 'de']
     }
   },
   methods: {
-    formSubmit(e){
+    formSubmit (e) {
       this.$emit('formSubmit', this.textForTranslate, this.langHome);
       e.preventDefault();
+    },
+    choosedLang (e) {
+      this.langHome = e;
+      this.langs = ['en', 'fr', 'de']
+      let index = this.langs.indexOf(e);
+      console.log(index + ' ' + e)
+      if (index > -1) {
+        //this.langs.splice(index, 1);
+        this.langs.push(e)
+      }
+      console.log(this.langs)
+      this.$emit('langsSubmit', this.langs);
     }
   }
 }

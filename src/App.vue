@@ -7,7 +7,10 @@
         <div class="col-sm"></div>
         <div class="col-sm home-box">
           <h1>Multi translator</h1>
-          <TranslateForm v-on:formSubmit="translateText"></TranslateForm>
+          <TranslateForm
+            v-on:formSubmit="translateText"
+            v-on:choosedLang="changeLangs"
+          ></TranslateForm>
           <!-- <ul id="example-1">
             <li v-for="word in words">
               {{ word }}
@@ -18,11 +21,10 @@
       </div>
 
       <div class="card-deck result-box">
-        <div v-for="word in words" class="card">
-          <img class="card-img-top flag" src="./img/de.jpg" alt="Card image cap">
+        <div v-for="word in words" class="card shadow p-3 mb-5 bg-white rounded">
+          <div :class="'flag-' + word.lang" class="shadow-sm p-3 mb-5 bg-color"><h4>{{ word.lang }}</h4></div>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">{{word}}</p>
+            <p class="card-text text-success"><h2>{{ word.text }}</h2></p>
           </div>
         </div>
 
@@ -41,7 +43,8 @@ export default {
   name: 'App',
   data() {
     return {
-      words: []
+      words: [],
+      langs: []
     };
   },
   components: {
@@ -50,18 +53,28 @@ export default {
   methods: {
     translateText: function (text, langHome) {
       if(text) {
+
           axios.all([
-            axios.get(url + '&lang=' + langHome + '-ru&text=' + text),
+
             axios.get(url + '&lang=' + langHome + '-en&text=' + text),
             axios.get(url + '&lang=' + langHome + '-fr&text=' + text),
-            axios.get(url + '&lang=' + langHome + '-de&text=' + text)
+            axios.get(url + '&lang=' + langHome + '-de&text=' + text),
+            axios.get(url + '&lang=' + langHome + '-ru&text=' + text)
           ])
-          .then(axios.spread((en, fr, de) => {
+          .then(axios.spread((lng1, lng2, lng3) => {
             this.words = []
-            this.words.push( en)
-            this.words.push( fr.data.text[0])
-            this.words.push( de.data.text[0])
+            this.words.push( {lang: lng1.data.lang.substring(3, 5), text: lng1.data.text[0]})
+            this.words.push( {lang: lng2.data.lang.substring(3, 5), text: lng2.data.text[0]})
+            this.words.push( {lang: lng3.data.lang.substring(3, 5), text: lng3.data.text[0]})
           }))
+      }
+    },
+    changeLangs: function (langs) {
+      if(langs) {
+        langs.forEach(element => {
+          this.langs.push( element )
+          console.log(element)
+        });
       }
     }
   }
@@ -84,8 +97,33 @@ body {
   margin-top: 30px;
 }
 
-.flag {
+.bg-color {
+  background-color: #e7eef1 !important;
+}
+
+.flag-de {
+  background: url("./img/de.jpg") no-repeat;
+  background-size: auto 60px;
   height: 60px;
+  background-repeat: no-repeat;
+}
+.flag-ru {
+  background: url("./img/ru.jpg") no-repeat;
+  background-size: auto 60px;
+  height: 60px;
+  background-repeat: no-repeat;
+}
+.flag-en {
+  background: url("./img/en.jpg") no-repeat;
+  background-size: auto 60px;
+  height: 60px;
+  background-repeat: no-repeat;
+}
+.flag-fr {
+  background: url("./img/fr.jpg") no-repeat;
+  background-size: auto 60px;
+  height: 60px;
+  background-repeat: no-repeat;
 }
 
 
