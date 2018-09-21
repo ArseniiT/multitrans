@@ -1,10 +1,6 @@
 <template>
   <div id="translateForm">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm">
-        </div>
-        <div class="col-sm">
+
           <div class="custom-block">
             <button v-on:click="langHome = 'ru'" class="btn btn-light custom">RU</button>
             <button v-on:click="langHome = 'en'" class="btn btn-light custom">ENG</button>
@@ -19,12 +15,7 @@
             v-bind:value="'Translate from ' + langHome"
             value="Translate + 'langHome'">
           </form>
-        </div>
-        <div class="col-sm">
-        </div>
 
-      </div>
-    </div>
   </div>
 </template>
 
