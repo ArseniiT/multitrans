@@ -6,7 +6,7 @@
       <div class="row">
         <div class="col-sm"></div>
         <div class="col-sm">
-          <h5 class="align-bottom"><a href="http://translate.yandex.ru/">Яandex</a></h5>
+          <h6 class="align-bottom"><a href="http://translate.yandex.ru/">Powered by Yandex.Translate</a></h6>
         </div>
         <div class="col-sm"></div>
       </div>
