@@ -15,25 +15,19 @@
         <div class="col-sm"></div>
       </div>
 
-      <div class="card-deck result-box">
-        <div v-for="word in words" class="card shadow p-3 mb-5 bg-white rounded">
-          <div :class="'flag-' + word.lang" class="shadow-sm p-3 mb-5 bg-color"><h4>{{ word.lang }}</h4></div>
-          <div class="card-body">
-            <p class="card-text text-success"><h2>{{ word.text }}</h2></p>
-          </div>
-        </div>
-      </div>
+      <TranslateOutput :words="words"></TranslateOutput>
 
     </div>
 
-    <Footer></Footer>
+    <FooterV></FooterV>
 
   </div>
 </template>
 
 <script>
 import TranslateForm from './components/TranslateForm'
-import Footer from './components/Footer'
+import TranslateOutput from './components/TranslateOutput'
+import FooterV from './components/FooterV'
 
 import axios from 'axios'
 let url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20180918T035733Z.0403f2aa10334fc4.421d7c2af7681f545dea5c8f42b061d8dbf609f5';
@@ -47,7 +41,8 @@ export default {
   },
   components: {
     TranslateForm,
-    Footer
+    TranslateOutput,
+    FooterV
   },
   methods: {
     translateText: function (text, langHome, langs) {
@@ -96,31 +91,5 @@ body {
 .bg-color {
   background-color: #e7eef1 !important;
 }
-
-.flag-de {
-  background: url("./img/de.jpg") no-repeat;
-  background-size: auto 60px;
-  height: 60px;
-  background-repeat: no-repeat;
-}
-.flag-ru {
-  background: url("./img/ru.jpg") no-repeat;
-  background-size: auto 60px;
-  height: 60px;
-  background-repeat: no-repeat;
-}
-.flag-en {
-  background: url("./img/en.jpg") no-repeat;
-  background-size: auto 60px;
-  height: 60px;
-  background-repeat: no-repeat;
-}
-.flag-fr {
-  background: url("./img/fr.jpg") no-repeat;
-  background-size: auto 60px;
-  height: 60px;
-  background-repeat: no-repeat;
-}
-
 
 </style>
